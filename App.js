@@ -16,43 +16,30 @@ import Pad from './components/Pad';
 
 Sound.setCategory('Playback');
 
+const soundMap = {
+  sound1 : 'a1.wav' ,
+  sound2 : 'a2.wav' ,
+  sound3 : 'a3.wav' ,
+  sound4 : 'a4.wav' ,
+  sound5 : 'a5.wav' ,
+  sound6 : 'a6.wav'
+}
+
 const appSounds ={};
+
+
 class App extends Component {
 
-
   componentDidMount() {
-    
-    appSounds.sound1 = new Sound('a1.wav' , Sound.MAIN_BUNDLE , (error)=>{
-      if(error){
-        console.log('failed to load sound' , error);
-        return;
-      }
+    Object.keys(soundMap).forEach(key => {
+      appSounds[key] = this.loadSound(soundMap[key])
+
     })
-    appSounds.sound2 = new Sound('a2.wav' , Sound.MAIN_BUNDLE , (error)=>{
-      if(error){
-        console.log('failed to load sound' , error);
-        return;
-      }
-    })
-    appSounds.sound3 = new Sound('a3.wav' , Sound.MAIN_BUNDLE , (error)=>{
-      if(error){
-        console.log('failed to load sound' , error);
-        return;
-      }
-    })
-    appSounds.sound4 = new Sound('a4.wav' , Sound.MAIN_BUNDLE , (error)=>{
-      if(error){
-        console.log('failed to load sound' , error);
-        return;
-      }
-    })
-    appSounds.sound5 = new Sound('a5.wav' , Sound.MAIN_BUNDLE , (error)=>{
-      if(error){
-        console.log('failed to load sound' , error);
-        return;
-      }
-    })
-    appSounds.sound6 = new Sound('a6.wav' , Sound.MAIN_BUNDLE , (error)=>{
+  }
+
+
+  loadSound = (soundName) => {
+    return new Sound( soundName , Sound.MAIN_BUNDLE , (error)=>{
       if(error){
         console.log('failed to load sound' , error);
         return;
@@ -60,24 +47,10 @@ class App extends Component {
     })
   }
 
-  onPressButtonPlay1( ){
-      appSounds.sound1.play();
+  onPressButtonPlay( soundName){
+    appSounds[soundName].play();
   }
-  onPressButtonPlay2( ){
-    appSounds.sound2.play();
-  }
-  onPressButtonPlay3( ){
-    appSounds.sound3.play();
-  }
-  onPressButtonPlay4( ){
-    appSounds.sound4.play();
-  }
-  onPressButtonPlay5( ){
-    appSounds.sound5.play();
-  }
-  onPressButtonPlay6( ){
-    appSounds.sound6.play();
-  }
+
 
   render(){
 
@@ -86,12 +59,13 @@ class App extends Component {
         <ScrollView style={styles.body}>
         <Text style={styles.text}> SoundPad App</Text>
         <View style={styles.position}>
-          <Pad num={1} onPressPad = {this.onPressButtonPlay1} ></Pad>
-          <Pad num={2} onPressPad = {this.onPressButtonPlay2} ></Pad>
-          <Pad num={3} onPressPad = {this.onPressButtonPlay3} ></Pad>
-          <Pad num={4} onPressPad = {this.onPressButtonPlay4} ></Pad>
-          <Pad num={5} onPressPad = {this.onPressButtonPlay5} ></Pad>
-          <Pad num={6} onPressPad = {this.onPressButtonPlay6} ></Pad>
+          {Object.keys(soundMap).map(( key , index )  => {
+            return(
+              <Pad key={key} num={ index + 1 } onPressPad = {() => {
+                this.onPressButtonPlay(key)
+              }} ></Pad>
+            )
+          })}
         </View>
         </ScrollView>
           
